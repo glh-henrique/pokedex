@@ -1,17 +1,6 @@
 import { API_PREFIX, PAGE_SIZE } from "../constants";
-import { IPageAction, IPageState } from "../interfaces";
 
-export const pageReducer = (state: IPageState, action: IPageAction) => {
-  const { type, value } = action;
-
-  if (!!type) {
-    return { ...state, [type]: value };
-  }
-
-  return state;
-};
-
-export async function getPage(
+export async function fetchPagedPokemons(
   page: number,
   signal?: AbortSignal
 ): Promise<any> {

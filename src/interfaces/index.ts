@@ -1,14 +1,14 @@
 export interface IPokemon {
   id: number;
   name: string;
-  url: string;
+  url?: string;
 }
 
 export interface IPokedexContext {
   pokemons: IPokemon[];
   isReady: boolean;
-  isLastPage: boolean;
-  loadMore: () => Promise<void>;
+  totalResults: number;
+  loadMore: (page: number) => void;
 }
 
 export interface IPageState {
@@ -19,9 +19,4 @@ export interface IPageState {
 export interface IPageAction {
   type: keyof IPageState;
   value: number;
-}
-
-export interface IPokemon {
-  id: number;
-  name: string;
 }

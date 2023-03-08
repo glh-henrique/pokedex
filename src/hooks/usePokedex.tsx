@@ -1,29 +1,13 @@
-import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { getPage, pageReducer } from "../utils";
+import { createContext, memo, useContext, useEffect, useState } from "react";
+import { fetchPagedPokemons } from "../utils";
 
-import { IPokedexContext } from "../interfaces";
-import { PAGE_SIZE } from "./../constants";
-
-const initialPageState = {
-  page: 0,
-  totalRecords: 0,
-};
+import { IPokedexContext, IPokemon } from "../interfaces";
 
 const PokedexContext = createContext<IPokedexContext>({
   pokemons: [],
+  totalResults: 0,
   isReady: false,
-  isLastPage: false,
-  loadMore: async () => undefined,
+  loadMore: () => {},
 });
 
 export function usePokedex() {
@@ -31,54 +15,22 @@ export function usePokedex() {
 }
 
 export function PokedexProvider({ children }: any) {
-  const fetching = useRef(false);
   const [isReady, setReady] = useState(false);
-  const [pokemons, setPokemons] = useState<any[]>([]);
-  const [{ page, totalRecords }, pageDispatcher] = useReducer(
-    pageReducer,
-    initialPageState
-  );
-
-  const isLastPage = useMemo(
-    () => page === Math.ceil(totalRecords / PAGE_SIZE),
-    [page, totalRecords]
-  );
-
-  const loadMore = useCallback(async () => {
-    if (!!fetching.current) {
-      return;
-    }
-
-    try {
-      const next = page + 1;
-      fetching.current = true;
-
-      const { results } = await getPage(next);
-
-      pageDispatcher({ type: "page", value: next });
-      setPokemons((records) => records.concat(results));
-    } finally {
-      fetching.current = false;
-    }
-  }, [page]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [pokemons, setPokemons] = useState<IPokemon[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function initialLoad() {
       try {
-        if (!!fetching.current) {
-          return;
-        }
+        const { count, results } = await fetchPagedPokemons(
+          0,
+          controller.signal
+        );
 
-        fetching.current = true;
-
-        const { count, results } = await getPage(0, controller.signal);
-
-        fetching.current = false;
-
-        pageDispatcher({ type: "totalRecords", value: count });
         setPokemons(results);
+        setTotalResults(count);
         setReady(true);
       } catch (error) {
         console.error(error);
@@ -88,16 +40,26 @@ export function PokedexProvider({ children }: any) {
     initialLoad();
 
     return () => {
-      if (!!fetching.current) {
-        controller.abort();
-      }
+      controller.abort();
     };
   }, []);
 
+  const loadMore = async (page: number) => {
+    setReady(false);
+    const controller = new AbortController();
+
+    try {
+      const { results } = await fetchPagedPokemons(page, controller.signal);
+
+      setPokemons(results);
+      setReady(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }; 
+
   return (
-    <PokedexContext.Provider
-      value={{ pokemons, isReady, isLastPage, loadMore }}
-    >
+    <PokedexContext.Provider value={{ pokemons, totalResults, isReady, loadMore }}>
       {children}
     </PokedexContext.Provider>
   );

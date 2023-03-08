@@ -1,7 +1,9 @@
-import { Container } from "@mui/material";
-import Header from "../Header";
+import {  Container, Divider } from "@mui/material";
 
-// export default function Layout({ children }: IParent) {
+import Header from "../Header";
+import TitlePages from "../TitlePages";
+
+//TODO: Change any to a proper type
 export default function Layout({ children }: any) {
   return (
     <>
@@ -15,6 +17,10 @@ export default function Layout({ children }: any) {
         }}
       >
         <Header />
+
+       <TitlePages />
+
+        <Divider />
 
         <Container
           disableGutters

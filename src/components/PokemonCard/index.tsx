@@ -12,7 +12,13 @@ export default function PokemonCard({
   name: string;
 }) {
   return (
-    <Card sx={{ minWidth: { xs: "100%", sm: "200px" }, margin: "12px" }}>
+    <Card
+      sx={{
+        minWidth: { xs: "100%", sm: "12.5rem" },
+        cursor: "pointer",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+      }}
+    >
       <CardHeader
         action={
           <IconButton aria-label="favorite">
@@ -23,7 +29,7 @@ export default function PokemonCard({
         subheader={`${generateHashId(id)}`}
       />
       <CardMedia
-        sx={{ width: "112px", height: "112px", margin: "auto" }}
+        sx={{ width: "7rem", height: "7rem", margin: "auto" }}
         component="img"
         alt={`image of ${name}`}
         image={`${AVATAR_PREFIX}/${id}.png`}
