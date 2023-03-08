@@ -8,11 +8,22 @@ export default function TitlePages() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const titlePage = location.pathname.split("/")[1];
+  const titlePage = location.pathname.split("/");
+
+
+  const showTitle = () => {
+    if (titlePage[2] !== "" && titlePage[2] !== undefined) {
+      return titlePage[2];
+    } else if ( titlePage[1] === "pokedex"){
+      return "Pokemon List";
+    } else {
+      return titlePage[1];
+    }
+  };
 
   return (
     <div>
-      {titlePage && (
+      {titlePage[2] !== "" && (
         <Button
           onClick={() => navigate(APP_ROUTES.BASE)}
           sx={{ position: "absolute" }}
@@ -32,7 +43,7 @@ export default function TitlePages() {
           textTransform: "capitalize",
         }}
       >
-        {titlePage ? titlePage : "Pokemon List"}
+        {showTitle()}
       </Typography>
     </div>
   );

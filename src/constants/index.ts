@@ -1,5 +1,5 @@
 export const APP_ROUTES = Object.freeze({
-  BASE: '/',
+  BASE: '/pokedex/',
   FAVORITES: '/favorites',
   NOTFOUND: '/notfound',
   DETAILS: '/details',
