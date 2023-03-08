@@ -1,16 +1,19 @@
 import React from "react";
 import { Grid, Pagination } from "@mui/material";
-import { usePokedex } from "../../hooks/usePokedex";
 import PokemonCard from "../PokemonCard";
 import { PAGE_SIZE } from "../../constants";
+import { IPokemon } from "../../interfaces";
 
-export default function ListPokemons() {
-  const { pokemons, totalResults, loadMore } = usePokedex();
-
-  const handlePageChange = async (page: number) => {
-    loadMore(page);
-  }
-
+export default function ListPokemons({
+  pokemons,
+  totalResults,
+  handlePageChange,
+}: {
+  pokemons: IPokemon[];
+  totalResults: number;
+  handlePageChange?: (page: number) => void;
+}) {
+  
   return (
     <>
       <Grid container justifyContent="center" sx={{ marginBottom: "6rem" }}>
@@ -19,13 +22,15 @@ export default function ListPokemons() {
             <PokemonCard key={pokemon.id} {...pokemon} />
           ))}
         </Grid>
-        <Pagination
-          onChange={(e, page) => handlePageChange(page)}
-          count={Math.round(totalResults / PAGE_SIZE)}
-          variant="outlined"
-          color="primary"
-          sx={{ marginTop: "2rem" }}
-        />
+        {totalResults > PAGE_SIZE && (
+          <Pagination
+            onChange={(e, page) => handlePageChange &&  handlePageChange(page)}
+            count={Math.round(totalResults / PAGE_SIZE)}
+            variant="outlined"
+            color="primary"
+            sx={{ marginTop: "2rem" }}
+          />
+        )}
       </Grid>
     </>
   );

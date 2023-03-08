@@ -11,3 +11,5 @@ export const AVATAR_PREFIX =
 export const API_PREFIX = 'https://pokeapi.co/api/v2';
 
 export const PAGE_SIZE = 20;
+
+export const LOCAL_STORAGE_KEY = 'pokedex-starred-pokemons';

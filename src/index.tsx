@@ -7,6 +7,7 @@ import Router from "./Router";
 import { darkTheme } from "./theme.config";
 import { ThemeProvider } from "@mui/material/styles";
 import { ProvidePokedex } from "./hooks/usePokedex";
+import { ProvideFavorites } from "./hooks/useFavorites";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,11 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider theme={darkTheme}>
     <ProvidePokedex>
-      <Suspense fallback={<Fallback />}>
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-      </Suspense>
+      <ProvideFavorites>
+        <Suspense fallback={<Fallback />}>
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+        </Suspense>
+      </ProvideFavorites>
     </ProvidePokedex>
   </ThemeProvider>
 );

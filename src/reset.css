@@ -38,7 +38,7 @@ q:before, q:after {
 	content: none;
 }
 #root {
-  background-color: rgba(0, 0, 0, 0.85);;
+  background-color: rgba(0, 0, 0, 0.85);
 }
 header {
 	background: transparent;
@@ -48,8 +48,10 @@ header {
 
 /* TODO: fix style using SX and remove this rules */
 .css-1qvr50w-MuiTypography-root{
+	font-size: 1rem !important;
 	text-overflow: ellipsis !important;
 	max-width: 120px  !important;
 	overflow: hidden !important;
 	white-space: nowrap !important;
+	text-transform: capitalize !important;
 }

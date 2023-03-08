@@ -3,11 +3,17 @@ import { usePokedex } from "../../hooks/usePokedex";
 import ListPokemons from "../ListPokemons";
 
 export default function Home() {
-  // const { pokemons, isLastPage } = usePokedex();
+  const { pokemons, totalResults, loadMore } = usePokedex();
+
+  const handlePageChange = async (page: number) => {
+    loadMore(page);
+  };
 
   return (
-    <div>
-      <ListPokemons  />
-    </div>
+      <ListPokemons
+        pokemons={pokemons}
+        totalResults={totalResults}
+        handlePageChange={handlePageChange}
+      />
   );
 }

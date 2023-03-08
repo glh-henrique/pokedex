@@ -1,8 +1,11 @@
 import React from "react";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import StarIcon from "@mui/icons-material/Star";
 import { Card, CardHeader, CardMedia, IconButton } from "@mui/material";
-import { AVATAR_PREFIX } from "../../constants";
+import { APP_ROUTES, AVATAR_PREFIX } from "../../constants";
 import { generateHashId } from "../../utils";
+import { useFavorites } from "../../hooks/useFavorites";
+import { useNavigate } from "react-router-dom";
 
 export default function PokemonCard({
   id,
@@ -11,6 +14,10 @@ export default function PokemonCard({
   id: number;
   name: string;
 }) {
+  const navigate = useNavigate();
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const target = `${APP_ROUTES.BASE}${name}`;
+
   return (
     <Card
       sx={{
@@ -18,11 +25,29 @@ export default function PokemonCard({
         cursor: "pointer",
         backgroundColor: "rgba(255, 255, 255, 0.1)",
       }}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        navigate(target)
+      }}
     >
       <CardHeader
         action={
-          <IconButton aria-label="favorite">
-            <StarOutlineIcon color="info" />
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+
+              toggleFavorite({ id, name });
+            }}
+            aria-label="favorite"
+          >
+            {isFavorite(id) ? (
+              <StarIcon sx={{ color: "yellow" }} />
+            ) : (
+              <StarOutlineIcon color="info" />
+            )}
           </IconButton>
         }
         title={name}

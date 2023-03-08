@@ -5,7 +5,7 @@ export async function fetchPagedPokemons(
   signal?: AbortSignal
 ): Promise<any> {
   const limit = PAGE_SIZE;
-  const offset = PAGE_SIZE * page;
+  const offset = page === 1 ? 0 : PAGE_SIZE * page;
 
   const req = await fetch(
     `${API_PREFIX}/pokemon?offset=${offset}&limit=${limit}`,
